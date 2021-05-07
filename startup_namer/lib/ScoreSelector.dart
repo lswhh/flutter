@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'package:flutter/gestures.dart';
 
-class RandomWords extends StatefulWidget{
-  RandomWordState createState() //=> RandomWordState();
+class ScoreSelector extends StatefulWidget{
+  ScoreSelectorState createState() //=> RandomWordState();
   {
-    return RandomWordState();
+    return ScoreSelectorState();
   }
 }
-class RandomWordState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  var _saved = <WordPair>{};
 
+class ScoreSelectorState extends State<ScoreSelector> {
+  final _suggestions = <int>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+  var _saved = <int>{};
+  var average = 150;
+  var initData = 150;
   void _pushSaved(){
     Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (BuildContext context) {
             final tiles = _saved.map(
-                (WordPair pair) {
+                (var score) {
                   return ListTile(
                     title: Text(
-                      pair.asPascalCase,
+                      score.toString(),
                       style: _biggerFont,
                     ),
                   );
@@ -32,7 +34,7 @@ class RandomWordState extends State<RandomWords> {
             ).toList();
             return Scaffold(
               appBar: AppBar(
-                title: Text('Saved Suggestions'),
+                title: Text('Saved Scores'),
               ),
               body: ListView(children: divided),
               );
@@ -47,29 +49,30 @@ class RandomWordState extends State<RandomWords> {
     //return Text(wordPair.asPascalCase);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Startup Name Generator'),
+        title: Text('Average Selector'),
         actions: [IconButton(icon: Icon(Icons.list), onPressed: _pushSaved)]
       ),
       body: _buildSuggestions(),
+      bottomNavigationBar: IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
     );
   }
 
-  Widget _buildRow(WordPair pair) {
-    final alreadySaved = _saved.contains(pair);
+  Widget _buildRow(int score) {
+    final alreadySaved = _saved.contains(score);
     return ListTile(
       title: Text(
-        pair.asPascalCase,
+        score.toString(),
         style: _biggerFont,
       ),
-      trailing: Icon( alreadySaved ? Icons.favorite : Icons.favorite_border,
+      trailing: Icon( alreadySaved ? Icons.check_circle : Icons.check_circle_outline,
       color: alreadySaved ? Colors.red : null,
       ),
       onTap: () {
         setState(() {
           if(alreadySaved == true) {
-              _saved.remove(pair);
+              _saved.remove(score);
           } else {
-            _saved.add(pair);
+            _saved.add(score);
           }
         });
       },
@@ -79,16 +82,27 @@ class RandomWordState extends State<RandomWords> {
     if (i.isOdd) return Divider(); /*2*/
     final index = i ~/ 2; /*3*/
     if (index >= _suggestions.length) {
-      _suggestions.addAll(generateWordPairs().take(10)); /*4*/
+      _suggestions.addAll(scoreGen(10)); /*4*/
     }
-    return _buildRow(_suggestions[index]);
+    if (index > 300)
+      return null;
+    else
+      return _buildRow(_suggestions[index]);
+  }
+  Iterable<int> scoreGen(int count) sync* {
+    int i = 0;
+    while (i < count && initData < 301) {
+      i++;
+      yield initData++;
+    }
   }
   Widget _buildSuggestions() {
     ListView listView =
     ListView.builder( padding: const EdgeInsets.all(16.0),
-        itemBuilder:/*1*/ this.listBuilder);
+        reverse: false,
+        itemBuilder:/*1*/ this.listBuilder,
+        itemCount: 601,
+        dragStartBehavior: DragStartBehavior.down );
     return listView;
   }
-
-
 }
