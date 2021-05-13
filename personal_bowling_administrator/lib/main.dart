@@ -6,19 +6,19 @@ import 'utils.dart' as utils;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   startMeUp() async {
-    Directory docsDir = await getApplicationDocumentsDirectory();
-    utils.docsDir = docsDir;
-    runApp(MyApp());
+    //Directory docsDir = await getApplicationDocumentsDirectory();
+    //utils.docsDir = docsDir;
+    runApp(MyPBAApp());
   }
   startMeUp();
 }
 
-class MyApp extends StatelessWidget {
+class MyPBAApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Personal Bowling Administrator',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,7 +31,25 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Personal Bowling Administrator'),
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.event), text: 'Score'),
+                Tab(icon: Icon(Icons.addchart))
+              ],
+            )
+          ),
+          body : TabBarView(
+            children : [
+              MyHomePage(), MyHomePage()
+            ]
+          )
+        )
+      ),
     );
   }
 }
@@ -80,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('test')//widget.title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
