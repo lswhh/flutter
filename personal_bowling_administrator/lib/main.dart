@@ -6,7 +6,7 @@ import 'utils.dart' as utils;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   startMeUp() async {
-    //Directory docsDir = await getApplicationDocumentsDirectory();
+    Directory docsDir = await getApplicationDocumentsDirectory();
     //utils.docsDir = docsDir;
     runApp(MyPBAApp());
   }
@@ -39,7 +39,7 @@ class MyPBAApp extends StatelessWidget {
             bottom: TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.event), text: 'Score'),
-                Tab(icon: Icon(Icons.addchart))
+                Tab(icon: Icon(Icons.addchart), text:'Drill Chart')
               ],
             )
           ),
