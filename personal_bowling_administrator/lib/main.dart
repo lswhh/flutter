@@ -2,12 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'utils.dart' as utils;
+import 'notes/Notes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   startMeUp() async {
     Directory docsDir = await getApplicationDocumentsDirectory();
-    //utils.docsDir = docsDir;
+    utils.docsDir = docsDir;
     runApp(MyPBAApp());
   }
   startMeUp();
@@ -32,20 +33,21 @@ class MyPBAApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             title: Text('Personal Bowling Administrator'),
             bottom: TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.event), text: 'Score'),
-                Tab(icon: Icon(Icons.addchart), text:'Drill Chart')
+                Tab(icon: Icon(Icons.addchart), text:'Drill Chart'),
+                Tab(icon: Icon(Icons.web_asset), text:'Notes')
               ],
             )
           ),
           body : TabBarView(
             children : [
-              MyHomePage(), MyHomePage()
+              MyHomePage(), MyHomePage(),Notes()
             ]
           )
         )
