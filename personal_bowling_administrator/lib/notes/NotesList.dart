@@ -105,13 +105,13 @@ class NotesList extends StatelessWidget {
               title : Text("Delete Note"),
               content : Text("Are you sure you want to delete ${inNote.title}?"),
               actions : [
-                FlatButton(child : Text("Cancel"),
+                TextButton(child : Text("Cancel"),
                     onPressed: () {
                       // Just hide dialog.
                       Navigator.of(inAlertContext).pop();
                     }
                 ),
-                FlatButton(child : Text("Delete"),
+                TextButton(child : Text("Delete"),
                     onPressed : () async {
                       // Delete from database, then hide dialog, show SnackBar, then re-load data for the list.
                       await NotesDBWorker.db.delete(inNote.id);

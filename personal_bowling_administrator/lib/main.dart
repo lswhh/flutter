@@ -41,7 +41,7 @@ class MyPBAApp extends StatelessWidget {
               tabs: [
                 Tab(icon: Icon(Icons.event), text: 'Score'),
                 Tab(icon: Icon(Icons.addchart), text:'Drill Chart'),
-                Tab(icon: Icon(Icons.web_asset), text:'Notes')
+                Tab(icon: Icon(Icons.content_paste), text:'Notes')
               ],
             )
           ),
