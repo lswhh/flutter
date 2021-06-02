@@ -2,7 +2,7 @@ import "../BaseModel.dart";
 
 
 /// A class representing this PIM entity type.
-class Appointment {
+class Score {
 
 
   /// The fields this entity type contains.
@@ -25,7 +25,7 @@ class Appointment {
 /// ********************************************************************************************************************
 /// The model backing this entity type's views.
 /// ********************************************************************************************************************
-class AppointmentsModel extends BaseModel {
+class ScoreModel extends BaseModel {
 
 
   /// The appointment time.  Needed to be able to display what the user picks in the Text widget on the entry screen.
@@ -47,4 +47,4 @@ class AppointmentsModel extends BaseModel {
 
 
 // The one and only instance of this model.
-AppointmentsModel appointmentsModel = AppointmentsModel();
+ScoreModel scoreModel = ScoreModel();

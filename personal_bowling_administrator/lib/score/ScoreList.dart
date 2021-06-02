@@ -5,15 +5,14 @@ import "package:intl/intl.dart";
 import "package:flutter_calendar_carousel/flutter_calendar_carousel.dart";
 import "package:flutter_calendar_carousel/classes/event.dart";
 import "package:flutter_calendar_carousel/classes/event_list.dart";
-import "AppointmentsDBWorker.dart";
-import "AppointmentsModel.dart" show Appointment, AppointmentsModel, appointmentsModel;
+import "ScoresDBWorker.dart";
+import "ScoreModel.dart" show Score, ScoreModel, scoreModel;
 
 
 /// ********************************************************************************************************************
 /// The Appointments List sub-screen.
 /// ********************************************************************************************************************
-class AppointmentsList extends StatelessWidget {
-
+class ScoreList extends StatelessWidget {
 
   /// The build() method.
   ///
@@ -25,8 +24,8 @@ class AppointmentsList extends StatelessWidget {
 
     // The list of dates with appointments.
     EventList<Event> _markedDateMap = EventList();
-    for (int i = 0; i < appointmentsModel.entityList.length; i++) {
-      Appointment appointment = appointmentsModel.entityList[i];
+    for (int i = 0; i < scoreModel.entityList.length; i++) {
+      Score appointment = scoreModel.entityList[i];
       List dateParts = appointment.apptDate.split(",");
       DateTime apptDate = DateTime(int.parse(dateParts[0]), int.parse(dateParts[1]), int.parse(dateParts[2]));
       _markedDateMap.add(
@@ -35,21 +34,21 @@ class AppointmentsList extends StatelessWidget {
     }
 
     // Return widget.
-    return ScopedModel<AppointmentsModel>(
-      model : appointmentsModel,
-      child : ScopedModelDescendant<AppointmentsModel>(
+    return ScopedModel<ScoreModel>(
+      model : scoreModel,
+      child : ScopedModelDescendant<ScoreModel>(
         builder : (inContext, inChild, inModel) {
           return Scaffold(
             // Add appointment.
             floatingActionButton : FloatingActionButton(
               child : Icon(Icons.add, color : Colors.white),
               onPressed : () async {
-                appointmentsModel.entityBeingEdited = Appointment();
+                scoreModel.entityBeingEdited = Score();
                 DateTime now = DateTime.now();
-                appointmentsModel.entityBeingEdited.apptDate = "${now.year},${now.month},${now.day}";
-                appointmentsModel.setChosenDate(DateFormat.yMMMMd("en_US").format(now.toLocal()));
-                appointmentsModel.setApptTime(null);
-                appointmentsModel.setStackIndex(1);
+                scoreModel.entityBeingEdited.apptDate = "${now.year},${now.month},${now.day}";
+                scoreModel.setChosenDate(DateFormat.yMMMMd("en_US").format(now.toLocal()));
+                scoreModel.setApptTime(null);
+                scoreModel.setStackIndex(1);
               }
             ),
               body : Column(
@@ -88,17 +87,17 @@ class AppointmentsList extends StatelessWidget {
     );
 
     print("## AppointmentsList._showAppointments(): appointmentsModel.entityList.length = "
-      "${appointmentsModel.entityList.length}");
+      "${scoreModel.entityList.length}");
     print("## AppointmentsList._showAppointments(): appointmentsModel.entityList = "
-      "${appointmentsModel.entityList}");
+      "${scoreModel.entityList}");
 
     showModalBottomSheet(
       context : inContext,
       builder : (BuildContext inContext) {
-        return ScopedModel<AppointmentsModel>(
-          model : appointmentsModel,
-          child : ScopedModelDescendant<AppointmentsModel>(
-            builder : (BuildContext inContext, Widget inChild, AppointmentsModel inModel) {
+        return ScopedModel<ScoreModel>(
+          model : scoreModel,
+          child : ScopedModelDescendant<ScoreModel>(
+            builder : (BuildContext inContext, Widget inChild, ScoreModel inModel) {
               return Scaffold(
                 body : Container(
                   child : Padding(
@@ -114,9 +113,9 @@ class AppointmentsList extends StatelessWidget {
                           Divider(),
                           Expanded(
                             child : ListView.builder(
-                              itemCount : appointmentsModel.entityList.length,
+                              itemCount : scoreModel.entityList.length,
                               itemBuilder : (BuildContext inBuildContext, int inIndex) {
-                                Appointment appointment = appointmentsModel.entityList[inIndex];
+                                Score appointment = scoreModel.entityList[inIndex];
                                 print("## AppointmentsList._showAppointments().ListView.builder(): "
                                   "appointment = $appointment");
                                 // Filter out any appointment that isn't for the specified date.
@@ -180,35 +179,35 @@ class AppointmentsList extends StatelessWidget {
   ///
   /// @param inContext     The BuildContext of the parent widget.
   /// @param inAppointment The Appointment being edited.
-  void _editAppointment(BuildContext inContext, Appointment inAppointment) async {
+  void _editAppointment(BuildContext inContext, Score inAppointment) async {
 
     print("## AppointmentsList._editAppointment(): inAppointment = $inAppointment");
 
     // Get the data from the database and send to the edit view.
-    appointmentsModel.entityBeingEdited = await AppointmentsDBWorker.db.get(inAppointment.id);
+    scoreModel.entityBeingEdited = await ScoresDBWorker.db.get(inAppointment.id);
     // Parse out the apptDate and apptTime, if any, and set them in the model
     // for display.
-    if (appointmentsModel.entityBeingEdited.apptDate == null) {
-      appointmentsModel.setChosenDate(null);
+    if (scoreModel.entityBeingEdited.apptDate == null) {
+      scoreModel.setChosenDate(null);
     } else {
-      List dateParts = appointmentsModel.entityBeingEdited.apptDate.split(",");
+      List dateParts = scoreModel.entityBeingEdited.apptDate.split(",");
       DateTime apptDate = DateTime(
         int.parse(dateParts[0]), int.parse(dateParts[1]), int.parse(dateParts[2])
       );
-      appointmentsModel.setChosenDate(
+      scoreModel.setChosenDate(
         DateFormat.yMMMMd("en_US").format(apptDate.toLocal())
       );
     }
-    if (appointmentsModel.entityBeingEdited.apptTime == null) {
-      appointmentsModel.setApptTime(null);
+    if (scoreModel.entityBeingEdited.apptTime == null) {
+      scoreModel.setApptTime(null);
     } else {
-      List timeParts = appointmentsModel.entityBeingEdited.apptTime.split(",");
+      List timeParts = scoreModel.entityBeingEdited.apptTime.split(",");
       TimeOfDay apptTime = TimeOfDay(
         hour : int.parse(timeParts[0]), minute : int.parse(timeParts[1])
       );
-      appointmentsModel.setApptTime(apptTime.format(inContext));
+      scoreModel.setApptTime(apptTime.format(inContext));
     }
-    appointmentsModel.setStackIndex(1);
+    scoreModel.setStackIndex(1);
     Navigator.pop(inContext);
 
   } /* End _editAppointment. */
@@ -219,7 +218,7 @@ class AppointmentsList extends StatelessWidget {
   /// @param  inContext     The parent build context.
   /// @param  inAppointment The appointment (potentially) being deleted.
   /// @return               Future.
-  Future _deleteAppointment(BuildContext inContext, Appointment inAppointment) async {
+  Future _deleteAppointment(BuildContext inContext, Score inAppointment) async {
 
     print("## AppointmentsList._deleteAppointment(): inAppointment = $inAppointment");
 
@@ -240,7 +239,7 @@ class AppointmentsList extends StatelessWidget {
             TextButton(child : Text("Delete"),
               onPressed : () async {
                 // Delete from database, then hide dialog, show SnackBar, then re-load data for the list.
-                await AppointmentsDBWorker.db.delete(inAppointment.id);
+                await ScoresDBWorker.db.delete(inAppointment.id);
                 Navigator.of(inAlertContext).pop();
                 Scaffold.of(inContext).showSnackBar(
                   SnackBar(
@@ -250,7 +249,7 @@ class AppointmentsList extends StatelessWidget {
                   )
                 );
                 // Reload data from database to update list.
-                appointmentsModel.loadData("appointments", AppointmentsDBWorker.db);
+                scoreModel.loadData("appointments", ScoresDBWorker.db);
               }
             )
           ]

@@ -1,18 +1,18 @@
 import "package:path/path.dart";
 import "package:sqflite/sqflite.dart";
 import "../utils.dart" as utils;
-import "AppointmentsModel.dart";
+import "ScoreModel.dart";
 
 
 /// ********************************************************************************************************************
 /// Database provider class for appointments.
 /// ********************************************************************************************************************
-class AppointmentsDBWorker {
+class ScoresDBWorker {
 
 
   /// Static instance and private constructor, since this is a singleton.
-  AppointmentsDBWorker._();
-  static final AppointmentsDBWorker db = AppointmentsDBWorker._();
+  ScoresDBWorker._();
+  static final ScoresDBWorker db = ScoresDBWorker._();
 
 
   /// The one and only database instance.
@@ -59,10 +59,10 @@ class AppointmentsDBWorker {
 
 
   /// Create a Appointment from a Map.
-  Appointment appointmentFromMap(Map inMap) {
+  Score appointmentFromMap(Map inMap) {
 
     print("## appointments AppointmentsDBWorker.appointmentFromMap(): inMap = $inMap");
-    Appointment appointment = Appointment();
+    Score appointment = Score();
     appointment.id = inMap["id"];
     appointment.title = inMap["title"];
     appointment.description = inMap["description"];
@@ -76,7 +76,7 @@ class AppointmentsDBWorker {
 
 
   /// Create a Map from a Appointment.
-  Map<String, dynamic> appointmentToMap(Appointment inAppointment) {
+  Map<String, dynamic> appointmentToMap(Score inAppointment) {
 
     print("## appointments AppointmentsDBWorker.appointmentToMap(): inAppointment = $inAppointment");
     Map<String, dynamic> map = Map<String, dynamic>();
@@ -95,7 +95,7 @@ class AppointmentsDBWorker {
   /// Create a appointment.
   ///
   /// @param inAppointment the Appointment object to create.
-  Future create(Appointment inAppointment) async {
+  Future create(Score inAppointment) async {
 
     print("## appointments AppointmentsDBWorker.create(): inAppointment = $inAppointment");
 
@@ -125,7 +125,7 @@ class AppointmentsDBWorker {
   ///
   /// @param  inID The ID of the appointment to get.
   /// @return      The corresponding Appointment object.
-  Future<Appointment> get(int inID) async {
+  Future<Score> get(int inID) async {
 
     print("## appointments AppointmentsDBWorker.get(): inID = $inID");
 
@@ -156,7 +156,7 @@ class AppointmentsDBWorker {
   /// Update a appointment.
   ///
   /// @param inAppointment The appointment to update.
-  Future update(Appointment inAppointment) async {
+  Future update(Score inAppointment) async {
 
     print("## appointments AppointmentsDBWorker.update(): inAppointment = $inAppointment");
 

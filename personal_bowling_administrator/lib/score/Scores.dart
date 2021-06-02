@@ -1,24 +1,24 @@
 import "package:flutter/material.dart";
 import "package:scoped_model/scoped_model.dart";
-import "AppointmentsDBWorker.dart";
-import "AppointmentsList.dart";
-import "AppointmentsEntry.dart";
-import "AppointmentsModel.dart" show AppointmentsModel, appointmentsModel;
+import "ScoresDBWorker.dart";
+import "ScoreList.dart";
+import "ScoresEntry.dart";
+import "ScoreModel.dart" show ScoreModel, scoreModel;
 
 
 /// ********************************************************************************************************************
 /// The Appointments screen.
 /// ********************************************************************************************************************
-class Appointments extends StatelessWidget {
+class Scores extends StatelessWidget {
 
 
   /// Constructor.
-  Appointments() {
+  Scores() {
 
     print("## Appointments.constructor");
 
     // Initial load of data.
-    appointmentsModel.loadData("appointments", AppointmentsDBWorker.db);
+    scoreModel.loadData("appointments", ScoresDBWorker.db);
 
   } /* End constructor. */
 
@@ -31,18 +31,18 @@ class Appointments extends StatelessWidget {
 
     print("## Appointments.build()");
 
-    return ScopedModel<AppointmentsModel>(
-      model : appointmentsModel,
-      child : ScopedModelDescendant<AppointmentsModel>(
-        builder : (BuildContext inContext, Widget inChild, AppointmentsModel inModel) {
+    return ScopedModel<ScoreModel>(
+      model : scoreModel,
+      child : ScopedModelDescendant<ScoreModel>(
+        builder : (BuildContext inContext, Widget inChild, ScoreModel inModel) {
           return IndexedStack(
-            index : inModel.stackIndex,
-            children : [
-              AppointmentsList(),
-              AppointmentsEntry()
-            ] /* End IndexedStack children. */
+              index: inModel.stackIndex,
+              children: [
+                ScoreList(),
+                ScoresEntry()
+              ] /* End IndexedStack children. */
           ); /* End IndexedStack. */
-        } /* End ScopedModelDescendant builder(). */
+        }
       ) /* End ScopedModelDescendant. */
     ); /* End ScopedModel. */
 

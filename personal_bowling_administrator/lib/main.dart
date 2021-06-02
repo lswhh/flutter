@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'utils.dart' as utils;
 import 'notes/Notes.dart';
-import 'appointments/Appointments.dart';
+import 'score/Scores.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +48,7 @@ class MyPBAApp extends StatelessWidget {
           ),
           body : TabBarView(
             children : [
-              Appointments(), MyHomePage(),Notes()
+              Scores(), MyHomePage(),Notes()
             ]
           )
         )
