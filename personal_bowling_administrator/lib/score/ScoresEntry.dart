@@ -127,7 +127,7 @@ class ScoresEntry extends StatelessWidget {
                   ListTile(
                     leading : Icon(Icons.alarm),
                     title : Text("Time"),
-                    subtitle : Text(scoreModel.apptTime == null ? "" : scoreModel.apptTime),
+                    subtitle : Text(scoreModel.scoretTime == null ? "" : scoreModel.scoretTime),
                     trailing : IconButton(
                       icon : Icon(Icons.edit),
                       color : Colors.blue,
@@ -168,7 +168,7 @@ class ScoresEntry extends StatelessWidget {
     // it shows on the screen.
     if (picked != null) {
       scoreModel.entityBeingEdited.apptTime = "${picked.hour},${picked.minute}";
-      scoreModel.setApptTime(picked.format(inContext));
+      scoreModel.setScoretTime(picked.format(inContext));
     }
 
   } /* End _selectTime(). */
@@ -204,15 +204,21 @@ class ScoresEntry extends StatelessWidget {
 
       // Go back to the list view.
       inModel.setStackIndex(0);
-
-      // Show SnackBar.
-      Scaffold.of(inContext).showSnackBar(
-        SnackBar(
+      ScaffoldMessenger.of(inContext).showSnackBar(
+          SnackBar(
           backgroundColor : Colors.green,
           duration : Duration(seconds : 2),
           content : Text("Appointment saved")
         )
       );
+      // // Show SnackBar.
+      // Scaffold.of(inContext).showSnackBar(
+      //   SnackBar(
+      //     backgroundColor : Colors.green,
+      //     duration : Duration(seconds : 2),
+      //     content : Text("Appointment saved")
+      //   )
+      // );
 
   } /* End _save(). */
 

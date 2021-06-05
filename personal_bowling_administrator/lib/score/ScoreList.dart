@@ -22,14 +22,14 @@ class ScoreList extends StatelessWidget {
 
     print("## AppointmentssList.build()");
 
-    // The list of dates with appointments.
+    // The list of dates with scores.
     EventList<Event> _markedDateMap = EventList();
     for (int i = 0; i < scoreModel.entityList.length; i++) {
-      Score appointment = scoreModel.entityList[i];
-      List dateParts = appointment.apptDate.split(",");
-      DateTime apptDate = DateTime(int.parse(dateParts[0]), int.parse(dateParts[1]), int.parse(dateParts[2]));
+      Score score = scoreModel.entityList[i];
+      List dateParts = score.scoretDate.split(",");
+      DateTime scoretDate = DateTime(int.parse(dateParts[0]), int.parse(dateParts[1]), int.parse(dateParts[2]));
       _markedDateMap.add(
-        apptDate, Event(date : apptDate, icon : Container(decoration : BoxDecoration(color : Colors.blue)))
+          scoretDate, Event(date : scoretDate, icon : Container(decoration : BoxDecoration(color : Colors.blue)))
       );
     }
 
@@ -45,9 +45,9 @@ class ScoreList extends StatelessWidget {
               onPressed : () async {
                 scoreModel.entityBeingEdited = Score();
                 DateTime now = DateTime.now();
-                scoreModel.entityBeingEdited.apptDate = "${now.year},${now.month},${now.day}";
+                scoreModel.entityBeingEdited.scoretDate = "${now.year},${now.month},${now.day}";
                 scoreModel.setChosenDate(DateFormat.yMMMMd("en_US").format(now.toLocal()));
-                scoreModel.setApptTime(null);
+                scoreModel.setScoretTime(null);
                 scoreModel.setStackIndex(1);
               }
             ),
@@ -115,23 +115,23 @@ class ScoreList extends StatelessWidget {
                             child : ListView.builder(
                               itemCount : scoreModel.entityList.length,
                               itemBuilder : (BuildContext inBuildContext, int inIndex) {
-                                Score appointment = scoreModel.entityList[inIndex];
+                                Score score = scoreModel.entityList[inIndex];
                                 print("## AppointmentsList._showAppointments().ListView.builder(): "
-                                  "appointment = $appointment");
+                                  "appointment = $score");
                                 // Filter out any appointment that isn't for the specified date.
-                                if (appointment.apptDate != "${inDate.year},${inDate.month},${inDate.day}") {
+                                if (score.scoretDate != "${inDate.year},${inDate.month},${inDate.day}") {
                                   return Container(height : 0);
                                 }
                                 print("## AppointmentsList._showAppointments().ListView.builder(): "
-                                  "INCLUDING appointment = $appointment");
+                                  "INCLUDING appointment = $score");
                                 // If the appointment has a time, format it for display.
-                                String apptTime = "";
-                                if (appointment.apptTime != null) {
-                                  List timeParts = appointment.apptTime.split(",");
+                                String scoretTime = "";
+                                if (score.scoretTime != null) {
+                                  List timeParts = score.scoretTime.split(",");
                                   TimeOfDay at = TimeOfDay(
                                     hour : int.parse(timeParts[0]), minute : int.parse(timeParts[1])
                                   );
-                                  apptTime = " (${at.format(inContext)})";
+                                  scoretTime = " (${at.format(inContext)})";
                                 }
                                 // Return a widget for the appointment since it's for the correct date.
                                 return Slidable(
@@ -141,11 +141,11 @@ class ScoreList extends StatelessWidget {
                                   margin : EdgeInsets.only(bottom : 8),
                                     color : Colors.grey.shade300,
                                     child : ListTile(
-                                      title : Text("${appointment.title}$apptTime"),
-                                      subtitle : appointment.description == null ?
-                                        null : Text("${appointment.description}"),
+                                      title : Text("${score.title}$scoretTime"),
+                                      subtitle : score.description == null ?
+                                        null : Text("${score.description}"),
                                       // Edit existing appointment.
-                                      onTap : () async { _editAppointment(inContext, appointment); }
+                                      onTap : () async { _editAppointment(inContext, score); }
                                     )
                                   ),
                                   secondaryActions : [
@@ -153,7 +153,7 @@ class ScoreList extends StatelessWidget {
                                       caption : "Delete",
                                       color : Colors.red,
                                       icon : Icons.delete,
-                                      onTap : () => _deleteAppointment(inBuildContext, appointment)
+                                      onTap : () => _deleteAppointment(inBuildContext, score)
                                     )
                                   ]
                                 ); /* End Slidable. */
@@ -187,25 +187,25 @@ class ScoreList extends StatelessWidget {
     scoreModel.entityBeingEdited = await ScoresDBWorker.db.get(inAppointment.id);
     // Parse out the apptDate and apptTime, if any, and set them in the model
     // for display.
-    if (scoreModel.entityBeingEdited.apptDate == null) {
+    if (scoreModel.entityBeingEdited.scoretDate == null) {
       scoreModel.setChosenDate(null);
     } else {
-      List dateParts = scoreModel.entityBeingEdited.apptDate.split(",");
-      DateTime apptDate = DateTime(
+      List dateParts = scoreModel.entityBeingEdited.scoretDate.split(",");
+      DateTime scoretDate = DateTime(
         int.parse(dateParts[0]), int.parse(dateParts[1]), int.parse(dateParts[2])
       );
       scoreModel.setChosenDate(
-        DateFormat.yMMMMd("en_US").format(apptDate.toLocal())
+        DateFormat.yMMMMd("en_US").format(scoretDate.toLocal())
       );
     }
-    if (scoreModel.entityBeingEdited.apptTime == null) {
-      scoreModel.setApptTime(null);
+    if (scoreModel.entityBeingEdited.scoretTime == null) {
+      scoreModel.setScoretTime(null);
     } else {
-      List timeParts = scoreModel.entityBeingEdited.apptTime.split(",");
-      TimeOfDay apptTime = TimeOfDay(
+      List timeParts = scoreModel.entityBeingEdited.scoretTime.split(",");
+      TimeOfDay scoretTime = TimeOfDay(
         hour : int.parse(timeParts[0]), minute : int.parse(timeParts[1])
       );
-      scoreModel.setApptTime(apptTime.format(inContext));
+      scoreModel.setScoretTime(scoretTime.format(inContext));
     }
     scoreModel.setStackIndex(1);
     Navigator.pop(inContext);
@@ -227,7 +227,7 @@ class ScoreList extends StatelessWidget {
       barrierDismissible : false,
       builder : (BuildContext inAlertContext) {
         return AlertDialog(
-          title : Text("Delete Appointment"),
+          title : Text("Delete Score"),
           content : Text("Are you sure you want to delete ${inAppointment.title}?"),
           actions : [
             TextButton(child : Text("Cancel"),
@@ -241,11 +241,11 @@ class ScoreList extends StatelessWidget {
                 // Delete from database, then hide dialog, show SnackBar, then re-load data for the list.
                 await ScoresDBWorker.db.delete(inAppointment.id);
                 Navigator.of(inAlertContext).pop();
-                Scaffold.of(inContext).showSnackBar(
+                ScaffoldMessenger.of(inContext).showSnackBar(
                   SnackBar(
                     backgroundColor : Colors.red,
                     duration : Duration(seconds : 2),
-                    content : Text("Appointment deleted")
+                    content : Text("Score deleted")
                   )
                 );
                 // Reload data from database to update list.

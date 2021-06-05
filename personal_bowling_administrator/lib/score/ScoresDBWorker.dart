@@ -38,17 +38,17 @@ class ScoresDBWorker {
   /// @return A Database instance.
   Future<Database> init() async {
 
-    String path = join(utils.docsDir.path, "appointments.db");
-    print("## appointments AppointmentsDBWorker.init(): path = $path");
+    String path = join(utils.docsDir.path, "scores.db");
+    print("## scores scoresDBWorker.init(): path = $path");
     Database db = await openDatabase(path, version : 1, onOpen : (db) { },
       onCreate : (Database inDB, int inVersion) async {
         await inDB.execute(
-          "CREATE TABLE IF NOT EXISTS appointments ("
+          "CREATE TABLE IF NOT EXISTS scores ("
             "id INTEGER PRIMARY KEY,"
             "title TEXT,"
             "description TEXT,"
-            "apptDate TEXT,"
-            "apptTime TEXT"
+            "scoretDate TEXT,"
+            "scoretTime TEXT"
           ")"
         );
       }
@@ -59,33 +59,33 @@ class ScoresDBWorker {
 
 
   /// Create a Appointment from a Map.
-  Score appointmentFromMap(Map inMap) {
+  Score scoreFromMap(Map inMap) {
 
-    print("## appointments AppointmentsDBWorker.appointmentFromMap(): inMap = $inMap");
-    Score appointment = Score();
-    appointment.id = inMap["id"];
-    appointment.title = inMap["title"];
-    appointment.description = inMap["description"];
-    appointment.apptDate = inMap["apptDate"];
-    appointment.apptTime = inMap["apptTime"];
-    print("## appointments AppointmentsDBWorker.appointmentFromMap(): appointment = $appointment");
+    print("## scores AppointmentsDBWorker.scoreFromMap(): inMap = $inMap");
+    Score score = Score();
+    score.id = inMap["id"];
+    score.title = inMap["title"];
+    score.description = inMap["description"];
+    score.scoretDate = inMap["scoretDate"];
+    score.scoretTime = inMap["scoretTime"];
+    print("## scores AppointmentsDBWorker.scoreFromMap(): appointment = $score");
 
-    return appointment;
+    return score;
 
   } /* End appointmentFromMap(); */
 
 
   /// Create a Map from a Appointment.
-  Map<String, dynamic> appointmentToMap(Score inAppointment) {
+  Map<String, dynamic> scoreToMap(Score inScore) {
 
-    print("## appointments AppointmentsDBWorker.appointmentToMap(): inAppointment = $inAppointment");
+    print("## scores ScoresDBWorker.scoreToMap(): inScore = $inScore");
     Map<String, dynamic> map = Map<String, dynamic>();
-    map["id"] = inAppointment.id;
-    map["title"] = inAppointment.title;
-    map["description"] = inAppointment.description;
-    map["apptDate"] = inAppointment.apptDate;
-    map["apptTime"] = inAppointment.apptTime;
-    print("## appointments AppointmentsDBWorker.appointmentToMap(): map = $map");
+    map["id"] = inScore.id;
+    map["title"] = inScore.title;
+    map["description"] = inScore.description;
+    map["scoretDate"] = inScore.scoretDate;
+    map["scoretTime"] = inScore.scoretTime;
+    print("## scores ScoresDBWorker.scoreToMap(): map = $map");
 
     return map;
 
@@ -95,9 +95,9 @@ class ScoresDBWorker {
   /// Create a appointment.
   ///
   /// @param inAppointment the Appointment object to create.
-  Future create(Score inAppointment) async {
+  Future create(Score inScore) async {
 
-    print("## appointments AppointmentsDBWorker.create(): inAppointment = $inAppointment");
+    print("## scores ScoresDBWorker.create(): inScore = $inScore");
 
     Database db = await database;
 
@@ -111,10 +111,10 @@ class ScoresDBWorker {
       "INSERT INTO appointments (id, title, description, apptDate, apptTime) VALUES (?, ?, ?, ?, ?)",
       [
         id,
-        inAppointment.title,
-        inAppointment.description,
-        inAppointment.apptDate,
-        inAppointment.apptTime
+        inScore.title,
+        inScore.description,
+        inScore.scoretDate,
+        inScore.scoretTime
       ]
     );
 
@@ -132,7 +132,7 @@ class ScoresDBWorker {
     Database db = await database;
     var rec = await db.query("appointments", where : "id = ?", whereArgs : [ inID ]);
     print("## appointments AppointmentsDBWorker.get(): rec.first = $rec.first");
-    return appointmentFromMap(rec.first);
+    return scoreFromMap(rec.first);
 
   } /* End get(). */
 
@@ -144,7 +144,7 @@ class ScoresDBWorker {
 
     Database db = await database;
     var recs = await db.query("appointments");
-    var list = recs.isNotEmpty ? recs.map((m) => appointmentFromMap(m)).toList() : [ ];
+    var list = recs.isNotEmpty ? recs.map((m) => scoreFromMap(m)).toList() : [ ];
 
     print("## appointments AppointmentsDBWorker.getAll(): list = $list");
 
@@ -162,7 +162,7 @@ class ScoresDBWorker {
 
     Database db = await database;
     return await db.update(
-      "appointments", appointmentToMap(inAppointment), where : "id = ?", whereArgs : [ inAppointment.id ]
+      "appointments", scoreToMap(inAppointment), where : "id = ?", whereArgs : [ inAppointment.id ]
     );
 
   } /* End update(). */

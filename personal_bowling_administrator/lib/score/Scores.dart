@@ -15,10 +15,10 @@ class Scores extends StatelessWidget {
   /// Constructor.
   Scores() {
 
-    print("## Appointments.constructor");
+    print("## Score.constructor");
 
     // Initial load of data.
-    scoreModel.loadData("appointments", ScoresDBWorker.db);
+    scoreModel.loadData("scores", ScoresDBWorker.db);
 
   } /* End constructor. */
 
