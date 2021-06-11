@@ -96,7 +96,7 @@ class NotesEntry extends StatelessWidget {
                             ListTile(
                                 leading : Icon(Icons.content_paste),
                                 title : TextFormField(
-                                    keyboardType : TextInputType.multiline, maxLines : 8,
+                                    keyboardType : TextInputType.multiline, maxLines : 10,
                                     decoration : InputDecoration(hintText : "Content"),
                                     controller : _contentEditingController,
                                     validator : (String inValue) {

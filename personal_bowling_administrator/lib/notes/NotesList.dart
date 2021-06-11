@@ -116,6 +116,7 @@ class NotesList extends StatelessWidget {
                       // Delete from database, then hide dialog, show SnackBar, then re-load data for the list.
                       await NotesDBWorker.db.delete(inNote.id);
                       Navigator.of(inAlertContext).pop();
+                      // ignore: deprecated_member_use
                       Scaffold.of(inContext).showSnackBar(
                           SnackBar(
                               backgroundColor : Colors.red,

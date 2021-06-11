@@ -145,6 +145,10 @@ class NotesDBWorker {
   } /* End get(). */
 
 
+  Note test(Map<String,Object> m)
+  {
+    return noteFromMap(m);
+  }
   /// Get all notes.
   ///
   /// @return A List of Note objects.
@@ -154,7 +158,7 @@ class NotesDBWorker {
 
     Database db = await database;
     var recs = await db.query("notes");
-    var list = recs.isNotEmpty ? recs.map((m) => noteFromMap(m)).toList() : [ ];
+    var list = recs.isNotEmpty ? recs.map(/*(m) => noteFromMap(m)*/test).toList() : [ ];
 
     print("## Notes NotesDBWorker.getAll(): list = $list");
 
