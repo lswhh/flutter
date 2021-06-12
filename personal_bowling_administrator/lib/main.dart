@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'utils.dart' as utils;
 import 'notes/Notes.dart';
 import 'score/Scores.dart';
+import 'tasks/Tasks.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +49,7 @@ class MyPBAApp extends StatelessWidget {
           ),
           body : TabBarView(
             children : [
-              Scores(), MyHomePage(),Notes()
+              Scores(), Tasks(), Notes()
             ]
           )
         )

@@ -11,7 +11,6 @@ import "TasksModel.dart" show Task, TasksModel, tasksModel;
 /// ********************************************************************************************************************
 class TasksList extends StatelessWidget {
 
-
   /// The build() method.
   ///
   /// @param  inContext The BuildContext for this widget.
@@ -132,13 +131,13 @@ class TasksList extends StatelessWidget {
           title : Text("Delete Task"),
           content : Text("Are you sure you want to delete ${inTask.description}?"),
           actions : [
-            FlatButton(child : Text("Cancel"),
+            TextButton(child : Text("Cancel"),
               onPressed: () {
                 // Just hide dialog.
                 Navigator.of(inAlertContext).pop();
               }
             ),
-            FlatButton(child : Text("Delete"),
+            TextButton(child : Text("Delete"),
               onPressed : () async {
                 // Delete from database, then hide dialog, show SnackBar, then re-load data for the list.
                 await TasksDBWorker.db.delete(inTask.id);
