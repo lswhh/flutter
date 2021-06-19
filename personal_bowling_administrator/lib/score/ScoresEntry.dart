@@ -127,7 +127,7 @@ class ScoresEntry extends StatelessWidget {
                   ListTile(
                     leading : Icon(Icons.alarm),
                     title : Text("Time"),
-                    subtitle : Text(scoreModel.scoretTime == null ? "" : scoreModel.scoretTime),
+                    subtitle : Text(scoreModel.scoreTime == null ? "" : scoreModel.scoreTime),
                     trailing : IconButton(
                       icon : Icon(Icons.edit),
                       color : Colors.blue,
@@ -155,8 +155,8 @@ class ScoresEntry extends StatelessWidget {
     TimeOfDay initialTime = TimeOfDay.now();
 
     // If editing an appointment, set the initialTime to the current apptTime, if any.
-    if (scoreModel.entityBeingEdited.apptTime != null) {
-      List timeParts = scoreModel.entityBeingEdited.apptTime.split(",");
+    if (scoreModel.entityBeingEdited.scoreTime != null) {
+      List timeParts = scoreModel.entityBeingEdited.scoreTime.split(",");
       // Create a DateTime using the hours, minutes and a/p from the apptTime.
       initialTime = TimeOfDay(hour : int.parse(timeParts[0]), minute : int.parse(timeParts[1]));
     }
@@ -167,7 +167,7 @@ class ScoresEntry extends StatelessWidget {
     // If they didn't cancel, update it on the appointment being edited as well as the apptTime field in the model so
     // it shows on the screen.
     if (picked != null) {
-      scoreModel.entityBeingEdited.apptTime = "${picked.hour},${picked.minute}";
+      scoreModel.entityBeingEdited.scoreTime = "${picked.hour},${picked.minute}";
       scoreModel.setScoretTime(picked.format(inContext));
     }
 

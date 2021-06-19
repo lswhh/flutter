@@ -10,7 +10,7 @@ import "ScoreModel.dart" show Score, ScoreModel, scoreModel;
 
 
 /// ********************************************************************************************************************
-/// The Appointments List sub-screen.
+/// The Score List sub-screen.
 /// ********************************************************************************************************************
 class ScoreList extends StatelessWidget {
 
@@ -20,7 +20,7 @@ class ScoreList extends StatelessWidget {
   /// @return           A Widget.
   Widget build(BuildContext inContext) {
 
-    print("## AppointmentssList.build()");
+    print("## ScoresList.build()");
 
     // The list of dates with scores.
     EventList<Event> _markedDateMap = EventList();
@@ -51,23 +51,34 @@ class ScoreList extends StatelessWidget {
                 scoreModel.setStackIndex(1);
               }
             ),
-              body : Column(
-              children : [
-                Expanded(
-                  child : Container(
-                    margin : EdgeInsets.symmetric(horizontal : 10),
-                    child : CalendarCarousel<Event>(
+              body: Container(
+                  margin : EdgeInsets.symmetric(horizontal : 10),
+                  child : CalendarCarousel<Event>(
                       thisMonthDayBorderColor : Colors.grey,
-                      daysHaveCircularBorder : false,
+                      daysHaveCircularBorder : true,
                       markedDatesMap : _markedDateMap,
                       onDayPressed : (DateTime inDate, List<Event> inEvents) {
                         _showAppointments(inDate, inContext);
                       }
-                    ) /* End CalendarCarousel. */
-                  ) /* End Container. */
-                ) /* End Expanded. */
-              ] /* End Column.children. */
-            ) /* End Column. */
+                  ) /* End CalendarCarousel. */
+              ) /* End Container. */
+            //   body : Column(
+            //   children : [
+            //     Expanded(
+            //       child : Container(
+            //         margin : EdgeInsets.symmetric(horizontal : 10),
+            //         child : CalendarCarousel<Event>(
+            //           thisMonthDayBorderColor : Colors.grey,
+            //           daysHaveCircularBorder : false,
+            //           markedDatesMap : _markedDateMap,
+            //           onDayPressed : (DateTime inDate, List<Event> inEvents) {
+            //             _showAppointments(inDate, inContext);
+            //           }
+            //         ) /* End CalendarCarousel. */
+            //       ) /* End Container. */
+            //     ) /* End Expanded. */
+            //   ] /* End Column.children. */
+            // ) /* End Column. */
           ); /* End Scaffold. */
         } /* End ScopedModelDescendant builder(). */
       ) /* End ScopedModelDescendant. */
@@ -126,8 +137,8 @@ class ScoreList extends StatelessWidget {
                                   "INCLUDING appointment = $score");
                                 // If the appointment has a time, format it for display.
                                 String scoretTime = "";
-                                if (score.scoretTime != null) {
-                                  List timeParts = score.scoretTime.split(",");
+                                if (score.scoreTime != null) {
+                                  List timeParts = score.scoreTime.split(",");
                                   TimeOfDay at = TimeOfDay(
                                     hour : int.parse(timeParts[0]), minute : int.parse(timeParts[1])
                                   );
@@ -179,12 +190,12 @@ class ScoreList extends StatelessWidget {
   ///
   /// @param inContext     The BuildContext of the parent widget.
   /// @param inAppointment The Appointment being edited.
-  void _editAppointment(BuildContext inContext, Score inAppointment) async {
+  void _editAppointment(BuildContext inContext, Score inScore) async {
 
-    print("## AppointmentsList._editAppointment(): inAppointment = $inAppointment");
+    print("## AppointmentsList._editAppointment(): inAppointment = $inScore");
 
     // Get the data from the database and send to the edit view.
-    scoreModel.entityBeingEdited = await ScoresDBWorker.db.get(inAppointment.id);
+    scoreModel.entityBeingEdited = await ScoresDBWorker.db.get(inScore.id);
     // Parse out the apptDate and apptTime, if any, and set them in the model
     // for display.
     if (scoreModel.entityBeingEdited.scoretDate == null) {
@@ -198,10 +209,10 @@ class ScoreList extends StatelessWidget {
         DateFormat.yMMMMd("en_US").format(scoretDate.toLocal())
       );
     }
-    if (scoreModel.entityBeingEdited.scoretTime == null) {
+    if (scoreModel.entityBeingEdited.scoreTime == null) {
       scoreModel.setScoretTime(null);
     } else {
-      List timeParts = scoreModel.entityBeingEdited.scoretTime.split(",");
+      List timeParts = scoreModel.entityBeingEdited.scoreTime.split(",");
       TimeOfDay scoretTime = TimeOfDay(
         hour : int.parse(timeParts[0]), minute : int.parse(timeParts[1])
       );

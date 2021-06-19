@@ -67,7 +67,7 @@ class ScoresDBWorker {
     score.title = inMap["title"];
     score.description = inMap["description"];
     score.scoretDate = inMap["scoretDate"];
-    score.scoretTime = inMap["scoretTime"];
+    score.scoreTime = inMap["scoretTime"];
     print("## scores AppointmentsDBWorker.scoreFromMap(): appointment = $score");
 
     return score;
@@ -84,7 +84,7 @@ class ScoresDBWorker {
     map["title"] = inScore.title;
     map["description"] = inScore.description;
     map["scoretDate"] = inScore.scoretDate;
-    map["scoretTime"] = inScore.scoretTime;
+    map["scoretTime"] = inScore.scoreTime;
     print("## scores ScoresDBWorker.scoreToMap(): map = $map");
 
     return map;
@@ -114,7 +114,7 @@ class ScoresDBWorker {
         inScore.title,
         inScore.description,
         inScore.scoretDate,
-        inScore.scoretTime
+        inScore.scoreTime
       ]
     );
 

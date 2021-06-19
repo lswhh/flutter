@@ -55,7 +55,7 @@ class TasksEntry extends StatelessWidget {
               padding : EdgeInsets.symmetric(vertical : 0, horizontal : 10),
               child : Row(
                 children : [
-                  FlatButton(child : Text("Cancel"),
+                  TextButton(child : Text("Cancel"),
                     onPressed : () {
                       // Hide soft keyboard.
                       FocusScope.of(inContext).requestFocus(FocusNode());
@@ -64,7 +64,7 @@ class TasksEntry extends StatelessWidget {
                     }
                   ),
                   Spacer(),
-                  FlatButton(child : Text("Save"),
+                  TextButton(child : Text("Save"),
                     onPressed : () { _save(inContext, tasksModel); }
                   )
                 ]

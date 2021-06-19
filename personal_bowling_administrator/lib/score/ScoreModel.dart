@@ -10,12 +10,12 @@ class Score {
   String title;
   String description;
   String scoretDate; // YYYY,MM,DD
-  String scoretTime; // HH,MM
+  String scoreTime; // HH,MM
 
 
   /// Just for debugging, so we get something useful in the console.
   String toString() {
-    return "{ id=$id, title=$title, description=$description, apptDate=$scoretDate, apptDate=$scoretTime }";
+    return "{ id=$id, title=$title, description=$description, apptDate=$scoretDate, apptDate=$scoreTime }";
   }
 
 
@@ -29,7 +29,7 @@ class ScoreModel extends BaseModel {
 
 
   /// The appointment time.  Needed to be able to display what the user picks in the Text widget on the entry screen.
-  String scoretTime;
+  String scoreTime;
 
 
   /// For display of the appointment time chosen by the user.
@@ -37,7 +37,7 @@ class ScoreModel extends BaseModel {
   /// @param inApptTime The appointment date in HH:MM form.
   void setScoretTime(String inScoretTime) {
 
-    scoretTime = inScoretTime;
+    scoreTime = inScoretTime;
     notifyListeners();
 
   } /* End setApptTime(). */
