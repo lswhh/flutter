@@ -15,7 +15,7 @@ class Score {
 
   /// Just for debugging, so we get something useful in the console.
   String toString() {
-    return "{ id=$id, title=$title, description=$description, apptDate=$scoretDate, apptDate=$scoreTime }";
+    return "{ id=$id, title=$title, description=$description, apptDate=$scoretDate, apptTime=$scoreTime }";
   }
 
 

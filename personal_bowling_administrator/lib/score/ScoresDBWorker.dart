@@ -61,14 +61,14 @@ class ScoresDBWorker {
   /// Create a Appointment from a Map.
   Score scoreFromMap(Map inMap) {
 
-    print("## scores AppointmentsDBWorker.scoreFromMap(): inMap = $inMap");
+    print("## scores scoresDBWorker.scoreFromMap(): inMap = $inMap");
     Score score = Score();
     score.id = inMap["id"];
     score.title = inMap["title"];
     score.description = inMap["description"];
     score.scoretDate = inMap["scoretDate"];
     score.scoreTime = inMap["scoretTime"];
-    print("## scores AppointmentsDBWorker.scoreFromMap(): appointment = $score");
+    print("## scores AppointmentsDBWorker.scoreFromMap(): scores = $score");
 
     return score;
 
@@ -102,13 +102,13 @@ class ScoresDBWorker {
     Database db = await database;
 
     // Get largest current id in the table, plus one, to be the new ID.
-    var val = await db.rawQuery("SELECT MAX(id) + 1 AS id FROM appointments");
+    var val = await db.rawQuery("SELECT MAX(id) + 1 AS id FROM scores");
     int id = val.first["id"];
     if (id == null) { id = 1; }
 
     // Insert into table.
     return await db.rawInsert(
-      "INSERT INTO appointments (id, title, description, apptDate, apptTime) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO scores (id, title, description, scoretDate, scoretTime) VALUES (?, ?, ?, ?, ?)",
       [
         id,
         inScore.title,
@@ -127,11 +127,11 @@ class ScoresDBWorker {
   /// @return      The corresponding Appointment object.
   Future<Score> get(int inID) async {
 
-    print("## appointments AppointmentsDBWorker.get(): inID = $inID");
+    print("## scores scoresDBWorker.get(): inID = $inID");
 
     Database db = await database;
-    var rec = await db.query("appointments", where : "id = ?", whereArgs : [ inID ]);
-    print("## appointments AppointmentsDBWorker.get(): rec.first = $rec.first");
+    var rec = await db.query("scores", where : "id = ?", whereArgs : [ inID ]);
+    print("## scores scoresDBWorker.get(): rec.first = $rec.first");
     return scoreFromMap(rec.first);
 
   } /* End get(). */
@@ -143,10 +143,10 @@ class ScoresDBWorker {
   Future<List> getAll() async {
 
     Database db = await database;
-    var recs = await db.query("appointments");
+    var recs = await db.query("scores");
     var list = recs.isNotEmpty ? recs.map((m) => scoreFromMap(m)).toList() : [ ];
 
-    print("## appointments AppointmentsDBWorker.getAll(): list = $list");
+    print("## scores scoresDBWorker.getAll(): list = $list");
 
     return list;
 
@@ -158,11 +158,11 @@ class ScoresDBWorker {
   /// @param inAppointment The appointment to update.
   Future update(Score inAppointment) async {
 
-    print("## appointments AppointmentsDBWorker.update(): inAppointment = $inAppointment");
+    print("## scores scoresDBWorker.update(): inAppointment = $inAppointment");
 
     Database db = await database;
     return await db.update(
-      "appointments", scoreToMap(inAppointment), where : "id = ?", whereArgs : [ inAppointment.id ]
+      "scores", scoreToMap(inAppointment), where : "id = ?", whereArgs : [ inAppointment.id ]
     );
 
   } /* End update(). */
@@ -173,10 +173,10 @@ class ScoresDBWorker {
   /// @param inID The ID of the appointment to delete.
   Future delete(int inID) async {
 
-    print("## appointments AppointmentsDBWorker.delete(): inID = $inID");
+    print("## scores scoresDBWorker.delete(): inID = $inID");
 
     Database db = await database;
-    return await db.delete("appointments", where : "id = ?", whereArgs : [ inID ]);
+    return await db.delete("scores", where : "id = ?", whereArgs : [ inID ]);
 
   } /* End delete(). */
 

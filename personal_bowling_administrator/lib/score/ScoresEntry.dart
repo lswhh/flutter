@@ -43,7 +43,7 @@ class ScoresEntry extends StatelessWidget {
   /// @return           A Widget.
   Widget build(BuildContext inContext) {
 
-    print("## AppointmentsEntry.build()");
+    print("## ScoressEntry.build()");
 
     // Set value of controllers.
     if (scoreModel.entityBeingEdited != null) {
@@ -86,7 +86,7 @@ class ScoresEntry extends StatelessWidget {
                   ListTile(
                     leading : Icon(Icons.subject),
                     title : TextFormField(
-                      decoration : InputDecoration(hintText : "Title"),
+                      decoration : InputDecoration(hintText : "Score Title"),
                       controller : _titleEditingController,
                       validator : (String inValue) {
                         if (inValue.length == 0) { return "Please enter a title"; }
@@ -97,11 +97,16 @@ class ScoresEntry extends StatelessWidget {
                   // Description.
                   ListTile(
                     leading : Icon(Icons.description),
-                    title : TextFormField(
-                      keyboardType : TextInputType.multiline,
-                      maxLines : 4,
-                      decoration : InputDecoration(hintText : "Description"),
-                      controller : _descriptionEditingController
+                    // title : TextFormField(
+                    //   keyboardType : TextInputType.multiline,
+                    //   maxLines : 4,
+                    //   decoration : InputDecoration(hintText : "Scores"),
+                    //   controller : _descriptionEditingController
+                    // )
+                    title: TextField(keyboardType: TextInputType.multiline,
+                    maxLines: 4,
+                    decoration : InputDecoration(hintText : "Scores"),
+                    controller : _descriptionEditingController
                     )
                   ),
                   // Appointment Date.

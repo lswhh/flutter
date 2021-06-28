@@ -58,7 +58,7 @@ class ScoreList extends StatelessWidget {
                       daysHaveCircularBorder : true,
                       markedDatesMap : _markedDateMap,
                       onDayPressed : (DateTime inDate, List<Event> inEvents) {
-                        _showAppointments(inDate, inContext);
+                        _showScores(inDate, inContext);
                       }
                   ) /* End CalendarCarousel. */
               ) /* End Container. */
@@ -87,19 +87,19 @@ class ScoreList extends StatelessWidget {
   } /* End build(). */
 
 
-  /// Show a bottom sheet to see the appointments for the selected day.
+  /// Show a bottom sheet to see the scores for the selected day.
   ///
   /// @param inDate    The date selected.
   /// @param inContext The build context of the parent widget.
-  void _showAppointments(DateTime inDate, BuildContext inContext) async {
+  void _showScores(DateTime inDate, BuildContext inContext) async {
 
     print(
-      "## AppointmentsList._showAppointments(): inDate = $inDate (${inDate.year},${inDate.month},${inDate.day})"
+      "## ScoresList._showScores(): inDate = $inDate (${inDate.year},${inDate.month},${inDate.day})"
     );
 
-    print("## AppointmentsList._showAppointments(): appointmentsModel.entityList.length = "
+    print("## ScoresList._showScores(): scoreModel.entityList.length = "
       "${scoreModel.entityList.length}");
-    print("## AppointmentsList._showAppointments(): appointmentsModel.entityList = "
+    print("## ScoresList._showScores(): scoreModel.entityList = "
       "${scoreModel.entityList}");
 
     showModalBottomSheet(
