@@ -39,7 +39,7 @@ class ScoreList extends StatelessWidget {
       child : ScopedModelDescendant<ScoreModel>(
         builder : (inContext, inChild, inModel) {
           return Scaffold(
-            // Add appointment.
+            // Add Score.
             floatingActionButton : FloatingActionButton(
               child : Icon(Icons.add, color : Colors.white),
               onPressed : () async {
@@ -127,15 +127,15 @@ class ScoreList extends StatelessWidget {
                               itemCount : scoreModel.entityList.length,
                               itemBuilder : (BuildContext inBuildContext, int inIndex) {
                                 Score score = scoreModel.entityList[inIndex];
-                                print("## AppointmentsList._showAppointments().ListView.builder(): "
+                                print("## ScoreList._showScores().ListView.builder(): "
                                   "appointment = $score");
                                 // Filter out any appointment that isn't for the specified date.
                                 if (score.scoretDate != "${inDate.year},${inDate.month},${inDate.day}") {
                                   return Container(height : 0);
                                 }
-                                print("## AppointmentsList._showAppointments().ListView.builder(): "
-                                  "INCLUDING appointment = $score");
-                                // If the appointment has a time, format it for display.
+                                print("## ScoreList._showScores().ListView.builder(): "
+                                  "INCLUDING score = $score");
+                                // If the score has a time, format it for display.
                                 String scoretTime = "";
                                 if (score.scoreTime != null) {
                                   List timeParts = score.scoreTime.split(",");
@@ -144,7 +144,7 @@ class ScoreList extends StatelessWidget {
                                   );
                                   scoretTime = " (${at.format(inContext)})";
                                 }
-                                // Return a widget for the appointment since it's for the correct date.
+                                // Return a widget for the score since it's for the correct date.
                                 return Slidable(
                                   actionPane: SlidableDrawerActionPane(),
                                   actionExtentRatio : .25,
@@ -155,8 +155,8 @@ class ScoreList extends StatelessWidget {
                                       title : Text("${score.title}$scoretTime"),
                                       subtitle : score.description == null ?
                                         null : Text("${score.description}"),
-                                      // Edit existing appointment.
-                                      onTap : () async { _editAppointment(inContext, score); }
+                                      // Edit existing score.
+                                      onTap : () async { _editScore(inContext, score); }
                                     )
                                   ),
                                   secondaryActions : [
@@ -164,7 +164,7 @@ class ScoreList extends StatelessWidget {
                                       caption : "Delete",
                                       color : Colors.red,
                                       icon : Icons.delete,
-                                      onTap : () => _deleteAppointment(inBuildContext, score)
+                                      onTap : () => _deleteScore(inBuildContext, score)
                                     )
                                   ]
                                 ); /* End Slidable. */
@@ -186,13 +186,13 @@ class ScoreList extends StatelessWidget {
   } /* End _showAppointments(). */
 
 
-  /// Handle taps on an appointment to trigger editing.
+  /// Handle taps on an score to trigger editing.
   ///
   /// @param inContext     The BuildContext of the parent widget.
-  /// @param inAppointment The Appointment being edited.
-  void _editAppointment(BuildContext inContext, Score inScore) async {
+  /// @param inScore       The Score being edited.
+  void _editScore(BuildContext inContext, Score inScore) async {
 
-    print("## AppointmentsList._editAppointment(): inAppointment = $inScore");
+    print("## ScoreList._editScore(): inScore = $inScore");
 
     // Get the data from the database and send to the edit view.
     scoreModel.entityBeingEdited = await ScoresDBWorker.db.get(inScore.id);
@@ -219,19 +219,17 @@ class ScoreList extends StatelessWidget {
       scoreModel.setScoretTime(scoretTime.format(inContext));
     }
     scoreModel.setStackIndex(1);
-    Navigator.pop(inContext);
-
-  } /* End _editAppointment. */
+  } /* End _editScore. */
 
 
   /// Show a dialog requesting delete confirmation.
   ///
   /// @param  inContext     The parent build context.
-  /// @param  inAppointment The appointment (potentially) being deleted.
+  /// @param  inScore       The score (potentially) being deleted.
   /// @return               Future.
-  Future _deleteAppointment(BuildContext inContext, Score inAppointment) async {
+  Future _deleteScore(BuildContext inContext, Score inScore) async {
 
-    print("## AppointmentsList._deleteAppointment(): inAppointment = $inAppointment");
+    print("## ScoreList._deleteScore(): inScore = $inScore");
 
     return showDialog(
       context : inContext,
@@ -239,7 +237,7 @@ class ScoreList extends StatelessWidget {
       builder : (BuildContext inAlertContext) {
         return AlertDialog(
           title : Text("Delete Score"),
-          content : Text("Are you sure you want to delete ${inAppointment.title}?"),
+          content : Text("Are you sure you want to delete ${inScore.title}?"),
           actions : [
             TextButton(child : Text("Cancel"),
               onPressed: () {
@@ -250,7 +248,7 @@ class ScoreList extends StatelessWidget {
             TextButton(child : Text("Delete"),
               onPressed : () async {
                 // Delete from database, then hide dialog, show SnackBar, then re-load data for the list.
-                await ScoresDBWorker.db.delete(inAppointment.id);
+                await ScoresDBWorker.db.delete(inScore.id);
                 Navigator.of(inAlertContext).pop();
                 ScaffoldMessenger.of(inContext).showSnackBar(
                   SnackBar(
@@ -260,7 +258,7 @@ class ScoreList extends StatelessWidget {
                   )
                 );
                 // Reload data from database to update list.
-                scoreModel.loadData("appointments", ScoresDBWorker.db);
+                scoreModel.loadData("scores", ScoresDBWorker.db);
               }
             )
           ]
@@ -268,7 +266,7 @@ class ScoreList extends StatelessWidget {
       }
     );
 
-  } /* End _deleteAppointment(). */
+  } /* End _deleteScore(). */
 
 
 } /* End class. */

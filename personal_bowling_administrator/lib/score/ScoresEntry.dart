@@ -28,6 +28,9 @@ class ScoresEntry extends StatelessWidget {
 
     // Attach event listeners to controllers to capture entries in model.
     _titleEditingController.addListener(() {
+      if (_titleEditingController.text.length == 0) {
+          _titleEditingController.text = "excercise";
+      }
       scoreModel.entityBeingEdited.title = _titleEditingController.text;
     });
     _descriptionEditingController.addListener(() {
@@ -56,93 +59,98 @@ class ScoresEntry extends StatelessWidget {
       model : scoreModel,
       child : ScopedModelDescendant<ScoreModel>(
         builder : (BuildContext inContext, Widget inChild, ScoreModel inModel) {
-          return Scaffold(
-            bottomNavigationBar : Padding(
-              padding : EdgeInsets.symmetric(vertical : 0, horizontal : 10),
-              child : Row(
-                children : [
-                  TextButton(
-                    child : Text("Cancel"),
-                    onPressed : () {
-                      // Hide soft keyboard.
-                      FocusScope.of(inContext).requestFocus(FocusNode());
-                      // Go back to the list view.
-                      inModel.setStackIndex(0);
-                    }
-                  ),
-                  Spacer(),
-                  TextButton(
-                    child : Text("Save"),
-                    onPressed : () { _save(inContext, scoreModel); }
-                  )
-                ]
-              )
-            ),
-            body : Form(
-              key : _formKey,
-              child : ListView(
-                children : [
-                  // Title.
-                  ListTile(
-                    leading : Icon(Icons.subject),
-                    title : TextFormField(
-                      decoration : InputDecoration(hintText : "Score Title"),
-                      controller : _titleEditingController,
-                      validator : (String inValue) {
-                        if (inValue.length == 0) { return "Please enter a title"; }
-                        return null;
-                      }
+          return WillPopScope(
+            onWillPop: () {
+              inModel.setStackIndex(0);
+            },
+            child: Scaffold(
+                bottomNavigationBar : Padding(
+                    padding : EdgeInsets.symmetric(vertical : 0, horizontal : 10),
+                    child : Row(
+                        children : [
+                          TextButton(
+                              child : Text("Cancel"),
+                              onPressed : () {
+                                // Hide soft keyboard.
+                                FocusScope.of(inContext).requestFocus(FocusNode());
+                                // Go back to the list view.
+                                inModel.setStackIndex(0);
+                              }
+                          ),
+                          Spacer(),
+                          TextButton(
+                              child : Text("Save"),
+                              onPressed : () { _save(inContext, scoreModel); }
+                          )
+                        ]
                     )
-                  ),
-                  // Description.
-                  ListTile(
-                    leading : Icon(Icons.description),
-                    // title : TextFormField(
-                    //   keyboardType : TextInputType.multiline,
-                    //   maxLines : 4,
-                    //   decoration : InputDecoration(hintText : "Scores"),
-                    //   controller : _descriptionEditingController
-                    // )
-                    title: TextField(keyboardType: TextInputType.multiline,
-                    maxLines: 4,
-                    decoration : InputDecoration(hintText : "Scores"),
-                    controller : _descriptionEditingController
-                    )
-                  ),
-                  // Appointment Date.
-                  ListTile(
-                    leading : Icon(Icons.today),
-                    title : Text("Date"),
-                    subtitle : Text(scoreModel.chosenDate == null ? "" : scoreModel.chosenDate),
-                    trailing : IconButton(
-                      icon : Icon(Icons.edit),
-                      color : Colors.blue,
-                      onPressed : () async {
-                        // Request a date from the user.  If one is returned, store it.
-                        String chosenDate = await utils.selectDate(
-                          inContext, scoreModel, scoreModel.entityBeingEdited.apptDate
-                        );
-                        if (chosenDate != null) {
-                          scoreModel.entityBeingEdited.apptDate = chosenDate;
-                        }
-                      }
-                    )
-                  ),
-                  // Appointment Time.
-                  ListTile(
-                    leading : Icon(Icons.alarm),
-                    title : Text("Time"),
-                    subtitle : Text(scoreModel.scoreTime == null ? "" : scoreModel.scoreTime),
-                    trailing : IconButton(
-                      icon : Icon(Icons.edit),
-                      color : Colors.blue,
-                      onPressed : () => _selectTime(inContext)
-                    )
-                  )
-                ] /* End Column children. */
-              ) /* End ListView. */
-            ) /* End Form. */
-          ); /* End Scaffold. */
+                ),
+                body : Form(
+                    key : _formKey,
+                    child : ListView(
+                        children : [
+                          // Title.
+                          ListTile(
+                              leading : Icon(Icons.subject),
+                              title : TextFormField(
+                                  decoration : InputDecoration(hintText : "Game Title: default excercise"),
+                                  controller : _titleEditingController,
+                                  validator : (String inValue) {
+                                    if (inValue.length == 0) { _titleEditingController.text = "excercise"; }
+                                    return null;
+                                  }
+                              )
+                          ),
+                          // Description.
+                          ListTile(
+                              dense: true,
+                              leading : Icon(Icons.description),
+                              title : TextFormField(
+                                // keyboardType : TextInputType.multiline,
+                                // maxLines : 4,
+                                  decoration : InputDecoration(hintText : "Score"),
+                                  controller : _descriptionEditingController,
+                                  validator : (String inValue) {
+                                    if (int.parse(inValue) < 0 || int.parse(inValue) > 300 ) {}
+                                    return null;
+                                  }
+                              )
+                          ),
+                          // Score Date.
+                          ListTile(
+                              leading : Icon(Icons.today),
+                              title : Text("Date"),
+                              subtitle : Text(scoreModel.chosenDate == null ? "" : scoreModel.chosenDate),
+                              trailing : IconButton(
+                                  icon : Icon(Icons.edit),
+                                  color : Colors.blue,
+                                  onPressed : () async {
+                                    // Request a date from the user.  If one is returned, store it.
+                                    String chosenDate = await utils.selectDate(
+                                        inContext, scoreModel, scoreModel.entityBeingEdited.apptDate
+                                    );
+                                    if (chosenDate != null) {
+                                      scoreModel.entityBeingEdited.apptDate = chosenDate;
+                                    }
+                                  }
+                              )
+                          ),
+                          // Score Time.
+                          ListTile(
+                              leading : Icon(Icons.alarm),
+                              title : Text("Time"),
+                              subtitle : Text(scoreModel.scoreTime == null ? getDefaultTime(inContext) : scoreModel.scoreTime),
+                              trailing : IconButton(
+                                  icon : Icon(Icons.edit),
+                                  color : Colors.blue,
+                                  onPressed : () => _selectTime(inContext)
+                              )
+                          )
+                        ] /* End Column children. */
+                    ) /* End ListView. */
+                ) /* End Form. */
+            )/* End Scaffold. */
+          );
         } /* End ScopedModelDescendant builder(). */
       ) /* End ScopedModelDescendant. */
     ); /* End ScopedModel. */
@@ -150,12 +158,22 @@ class ScoresEntry extends StatelessWidget {
   } /* End build(). */
 
 
+  String getDefaultTime(BuildContext inContext)
+  {
+    TimeOfDay initialTime = TimeOfDay.now();
+    var currentTime = "${initialTime.hour},${initialTime.minute}";
+    if (scoreModel.entityBeingEdited != null) {
+      scoreModel.entityBeingEdited.scoreTime = currentTime;
+    }
+    scoreModel.setScoretTime(initialTime.format(inContext));
+    return currentTime;
+  }
   /// Function for handling taps on the edit icon for apptDate.
   ///
   /// @param inContext  The BuildContext of the parent Widget.
   /// @return           Future.
   Future _selectTime(BuildContext inContext) async {
-
+  //_selectTime(BuildContext inContext) {
     // Default to right now, assuming we're adding an appointment.
     TimeOfDay initialTime = TimeOfDay.now();
 
@@ -168,7 +186,7 @@ class ScoresEntry extends StatelessWidget {
 
     // Now request the time.
     TimeOfDay picked = await showTimePicker(context : inContext, initialTime : initialTime);
-
+    //TimeOfDay picked = initialTime;
     // If they didn't cancel, update it on the appointment being edited as well as the apptTime field in the model so
     // it shows on the screen.
     if (picked != null) {
@@ -185,7 +203,7 @@ class ScoresEntry extends StatelessWidget {
   /// @param inModel   The AppointmentsModel.
   void _save(BuildContext inContext, ScoreModel inModel) async {
 
-      print("## AppointmentsEntry._save()");
+      print("## ScoresEntry._save()");
 
       // Abort if form isn't valid.
       if (!_formKey.currentState.validate()) { return; }
@@ -193,19 +211,19 @@ class ScoresEntry extends StatelessWidget {
       // Creating a new appointment.
       if (inModel.entityBeingEdited.id == null) {
 
-        print("## AppointmentsEntry._save(): Creating: ${inModel.entityBeingEdited}");
+        print("## ScoresEntry._save(): Creating: ${inModel.entityBeingEdited}");
         await ScoresDBWorker.db.create(scoreModel.entityBeingEdited);
 
       // Updating an existing appointment.
       } else {
 
-        print("## AppointmentsEntry._save(): Updating: ${inModel.entityBeingEdited}");
+        print("## ScoresEntry._save(): Updating: ${inModel.entityBeingEdited}");
         await ScoresDBWorker.db.update(scoreModel.entityBeingEdited);
 
       }
 
       // Reload data from database to update list.
-      scoreModel.loadData("appointments", ScoresDBWorker.db);
+      scoreModel.loadData("scores", ScoresDBWorker.db);
 
       // Go back to the list view.
       inModel.setStackIndex(0);
@@ -213,18 +231,9 @@ class ScoresEntry extends StatelessWidget {
           SnackBar(
           backgroundColor : Colors.green,
           duration : Duration(seconds : 2),
-          content : Text("Appointment saved")
+          content : Text("Score saved")
         )
       );
-      // // Show SnackBar.
-      // Scaffold.of(inContext).showSnackBar(
-      //   SnackBar(
-      //     backgroundColor : Colors.green,
-      //     duration : Duration(seconds : 2),
-      //     content : Text("Appointment saved")
-      //   )
-      // );
-
   } /* End _save(). */
 
 

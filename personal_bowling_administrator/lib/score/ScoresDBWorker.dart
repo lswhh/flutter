@@ -27,7 +27,7 @@ class ScoresDBWorker {
     if (_db == null) {
       _db = await init();
     }
-    print("## appointments AppointmentsDBWorker.get-database(): _db = $_db");
+    print("## scores ScoresDBWorker.get-database(): _db = $_db");
     return _db;
 
   } /* End database getter. */
